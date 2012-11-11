@@ -113,4 +113,20 @@ describe User do
 
   end
 
+  context "email should be downcased before saving" do
+  	before {@user.save}
+  	let (:not_found_user) {User.find_by_email(@user.email.upcase)}
+
+  	it {should_not == not_found_user}	
+  end
+
+  context "email address with mixed case should be stored downcased" do
+  	let (:mixed_case_email) {"Foo@ExAMPLE.cOm"}
+
+  	it "should be all lower case" do
+  		@user.email = mixed_case_email
+  		@user.save
+  		@user.reload.email.should == mixed_case_email.downcase
+  	end
+  end
 end
